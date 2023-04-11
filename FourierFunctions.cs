@@ -63,9 +63,9 @@ namespace Fourier
 
         static Complex GetW(int length, int i)
         {
-            var abs = -Math.PI / length;
-            var wBase = new Complex(Math.Cos(abs), Math.Sin(abs));
-            return Complex.Pow(wBase, i);
+            var term = - Math.PI * i / length;
+            var res = new Complex(Math.Cos(term), Math.Sin(term));
+            return res;
         }
     }
 }
