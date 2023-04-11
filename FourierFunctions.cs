@@ -28,25 +28,25 @@ namespace Fourier
             };
 
             var length = signal.Length / 2;
-            var x_even = new Complex[length];
-            var x_odd = new Complex[length];
+            var a0 = new Complex[length];
+            var a1 = new Complex[length];
 
             for (int i = 0; i < length; i++)
             {
                 var even = signal[i];
                 var odd = signal[length + i];
 
-                x_even[i] = even + odd;
-                x_odd[i] = (even - odd) * GetW(length, i);
+                a0[i] = even + odd;
+                a1[i] = (even - odd) * GetW(length, i);
             }
 
-            FFT(x_even);
-            FFT(x_odd);
+            FFT(a0);
+            FFT(a1);
 
             for (int i = 0, j = 0; i < length; i++)
             {
-                signal[j++] = x_even[i];
-                signal[j++] = x_odd[i];
+                signal[j++] = a0[i];
+                signal[j++] = a1[i];
             }
             return signal;
         }
