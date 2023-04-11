@@ -29,7 +29,7 @@ class Program
 
         var dftRes = FourierFuncs.DFT(signalComplex);
         var fftRes = FourierFuncs.FFT(signalComplex);
-        var bipRes = FourierFuncs.BinaryInversePermutate(fftRes!);
+        var bipRes = FourierFuncs.Normalize(fftRes!);
 
         var dft_word = GetWordFromResult(dftRes);
         var fft_word = GetWordFromResult(bipRes);

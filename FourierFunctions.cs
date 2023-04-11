@@ -7,7 +7,7 @@ namespace Fourier
         public static Complex[] DFT(Complex[] signal)
         {
             var length = signal.Length;
-            var dft_res = new Complex[length];
+            var res = new Complex[length];
             for (int k = 0; k < length; k++)
             {
                 Complex sum = 0;
@@ -15,9 +15,9 @@ namespace Fourier
                 {
                     sum += signal[n] * Complex.Exp(-2 * Math.PI * Complex.ImaginaryOne * k * n / length);
                 }
-                dft_res[k] = sum;
+                res[k] = sum;
             }
-            return BinaryInversePermutate(dft_res);
+            return Normalize(res);
         }
 
         public static Complex[]? FFT(Complex[] signal)
@@ -28,42 +28,42 @@ namespace Fourier
             };
 
             var length = signal.Length / 2;
-            var a0 = new Complex[length];
-            var a1 = new Complex[length];
+            var leftPart = new Complex[length];
+            var rightPart = new Complex[length];
 
             for (int i = 0; i < length; i++)
             {
-                var even = signal[i];
-                var odd = signal[length + i];
+                var leftElem = signal[i];
+                var rightElem = signal[length + i];
 
-                a0[i] = even + odd;
-                a1[i] = (even - odd) * GetW(length, i);
+                leftPart[i] = leftElem + rightElem;
+                rightPart[i] = (leftElem - rightElem) * GetW(length, i);
             }
 
-            FFT(a0);
-            FFT(a1);
+            FFT(leftPart);
+            FFT(rightPart);
 
             for (int i = 0, j = 0; i < length; i++)
             {
-                signal[j++] = a0[i];
-                signal[j++] = a1[i];
+                signal[j++] = leftPart[i];
+                signal[j++] = rightPart[i];
             }
             return signal;
         }
 
-        public static Complex[] BinaryInversePermutate(Complex[] permutated)
+        public static Complex[] Normalize(Complex[] data)
         {
-            double factor = permutated.Length / 2;
-            for (var i = 0; i < permutated.Length; i++)
+            double normalizationFactor = data.Length / 2;
+            for (var i = 0; i < data.Length; i++)
             {
-                permutated[i] /= factor;
+                data[i] /= normalizationFactor;
             }
-            return permutated;
+            return data;
         }
 
         static Complex GetW(int length, int i)
         {
-            var term = - Math.PI * i / length;
+            var term = -Math.PI * i / length;
             var res = new Complex(Math.Cos(term), Math.Sin(term));
             return res;
         }
